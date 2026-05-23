@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServiceAccountIdToken } from "@/app/lib/serviceAccount"
-
-const BUMP_BACKEND_URL = process.env.BUMP_BACKEND_URL!
+import { fetchBackend } from "@/app/lib/fetchBackend"
 
 async function proxy(
   req: NextRequest,
@@ -15,29 +13,11 @@ async function proxy(
 
   const { path } = await params
   const search = req.nextUrl.search
-  const url = `${BUMP_BACKEND_URL}/api/v1/${path.join("/")}${search}`
   const hasBody = !["GET", "HEAD", "DELETE"].includes(req.method)
 
-  const saToken = await getServiceAccountIdToken()
-
-  // In production: Cloud Run requires the OIDC token in Authorization.
-  // The user JWT travels in X-User-Token so the backend can identify the user.
-  // In development: keep the original behavior (user JWT in Authorization).
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    ...(saToken
-      ? {
-          Authorization: `Bearer ${saToken}`,
-          "X-User-Token": userToken,
-        }
-      : {
-          Authorization: `Bearer ${userToken}`,
-        }),
-  }
-
-  const upstream = await fetch(url, {
+  const upstream = await fetchBackend(`/api/v1/${path.join("/")}${search}`, {
     method: req.method,
-    headers,
+    userToken,
     body: hasBody ? await req.text() : undefined,
   })
 

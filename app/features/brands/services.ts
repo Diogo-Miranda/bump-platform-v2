@@ -1,17 +1,15 @@
-import type { ApiBrandsResponse, Brand } from '@/app/features/brands/types'
+import { fetchBackend } from "@/app/lib/fetchBackend"
+import type { ApiBrandsResponse, Brand } from "@/app/features/brands/types"
 
 function slugify(name: string): string {
-  return name.toLowerCase().replace(/\s+/g, '-')
+  return name.toLowerCase().replace(/\s+/g, "-")
 }
 
 export async function getBrands(token: string): Promise<Brand[]> {
-  const backendUrl = process.env.BUMP_BACKEND_URL
-  if (!backendUrl) return []
-
   try {
-    const res = await fetch(`${backendUrl}/api/v1/brands/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
+    const res = await fetchBackend("/api/v1/brands/me", {
+      userToken: token,
+      cache: "no-store",
     })
 
     if (!res.ok) return []

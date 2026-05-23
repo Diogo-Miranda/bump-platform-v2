@@ -1,13 +1,14 @@
-import type { ApiBrandContentsResponse, StreamingData } from '@/app/features/streaming/types'
+import { fetchBackend } from "@/app/lib/fetchBackend"
+import type { ApiBrandContentsResponse, StreamingData } from "@/app/features/streaming/types"
 
 const DAY_OF_WEEK_PT: Record<string, string> = {
-  sunday: 'Domingo',
-  monday: 'Segunda-feira',
-  tuesday: 'Terça-feira',
-  wednesday: 'Quarta-feira',
-  thursday: 'Quinta-feira',
-  friday: 'Sexta-feira',
-  saturday: 'Sábado',
+  sunday: "Domingo",
+  monday: "Segunda-feira",
+  tuesday: "Terça-feira",
+  wednesday: "Quarta-feira",
+  thursday: "Quinta-feira",
+  friday: "Sexta-feira",
+  saturday: "Sábado",
 }
 
 export async function getStreamingByBrand(
@@ -16,12 +17,9 @@ export async function getStreamingByBrand(
   date: string,
   token: string
 ): Promise<StreamingData> {
-  const backendUrl = process.env.BUMP_BACKEND_URL
-  if (!backendUrl) throw new Error('BUMP_BACKEND_URL is not set')
-
-  const res = await fetch(
-    `${backendUrl}/api/v1/brand-contents/${brandSlug}/${date}/signed`,
-    { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
+  const res = await fetchBackend(
+    `/api/v1/brand-contents/${brandSlug}/${date}/signed`,
+    { userToken: token, cache: "no-store" }
   )
 
   if (res.status === 404) {
@@ -45,7 +43,7 @@ export async function getStreamingByBrand(
       location: c.localization,
       statics: c.contents_metadata[0]?.statics ?? [],
       video: c.contents_metadata[0]?.video,
-      status: c.status === 'active' ? 'active' : 'inactive',
+      status: c.status === "active" ? "active" : "inactive",
     })),
   }
 }
