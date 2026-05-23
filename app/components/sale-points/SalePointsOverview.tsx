@@ -93,10 +93,10 @@ export default function SalePointsOverview({ data }: Props) {
                 <td className="px-4 align-middle">{pdv.chain}</td>
                 <td className="px-4 align-middle">{pdv.city}</td>
                 <td className="px-4 align-middle">{pdv.brand}</td>
-                <td className="px-4 align-middle">t {pdv.screens.t}</td>
-                <td className="px-4 align-middle">r1 {pdv.screens.r1}</td>
-                <td className="px-4 align-middle">r2 {pdv.screens.r2}</td>
-                <td className="px-4 align-middle">r3 {pdv.screens.r3}</td>
+                <td className="px-4 align-middle">t {pdv.screens.find(s => s.label === "T")?.resolution}</td>
+                <td className="px-4 align-middle">r1 {pdv.screens.find(s => s.label === "R1")?.resolution}</td>
+                <td className="px-4 align-middle">r2 {pdv.screens.find(s => s.label === "R2")?.resolution}</td>
+                <td className="px-4 align-middle">r3 {pdv.screens.find(s => s.label === "R3")?.resolution}</td>
                 <td className="px-4 align-middle">{pdv.provider}</td>
                 <td className="px-4 align-middle text-right">
                   <a href="#" className="font-mono uppercase underline whitespace-nowrap hover:opacity-60">

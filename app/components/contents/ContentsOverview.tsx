@@ -1,7 +1,7 @@
 import Link from "next/link"
 import PageHeader from "@/app/components/layout/PageHeader"
 import PageFooter from "@/app/components/layout/PageFooter"
-import { GlassPill } from "@/app/components/dashboard/DashboardOverview"
+import GlassPill from "@/app/components/ui/GlassPill"
 
 const ACTIONS = [
   { id: "add", label: "ADICIONAR CONTEUDO", href: "/conteudo/adicionar" },
