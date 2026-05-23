@@ -69,8 +69,6 @@ export default function ProjectsList({ brands }: Props) {
     }
   }, [isScrollable, listHeight])
 
-  if (brands.length === 0) return null
-
   // Duplica apenas quando há scroll para o loop seamless
   const displayedBrands = isScrollable ? [...brands, ...brands] : brands
 
@@ -113,38 +111,54 @@ export default function ProjectsList({ brands }: Props) {
         </button>
       </div>
 
-      {/* Brand list — paddingTop: 50vh inicia a lista do centro da tela */}
-      <div
-        className="absolute top-0 bottom-0 z-10 overflow-hidden"
-        style={{ left: "calc(37.5% + 14px)", paddingTop: "30vh" }}
-      >
-        <div
-          ref={listRef}
-          className="flex flex-col"
-          style={{ willChange: isScrollable ? "transform" : "auto" }}
+      {/* Empty state */}
+      {brands.length === 0 && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center"
+          style={{ left: "calc(37.5% + 14px)" }}
         >
-          {displayedBrands.map((brand, i) => {
-            const words = brand.name.trim().split(/\s+/)
-            return (
-              <div
-                key={`${brand.slug}-${i}`}
-                onClick={() => router.push(`/streaming/${brand.slug}`)}
-                className="cursor-pointer transition-opacity hover:opacity-70"
-              >
-                {words.map((word, wi) => (
-                  <div
-                    key={wi}
-                    className="font-sans font-normal text-white"
-                    style={{ fontSize: `${LINE_HEIGHT}px`, lineHeight: "1", height: `${LINE_HEIGHT}px`, overflow: "hidden" }}
-                  >
-                    {word}
-                  </div>
-                ))}
-              </div>
-            )
-          })}
+          <p
+            className="font-sans font-normal text-white/40"
+            style={{ fontSize: "clamp(20px, 2vw, 28px)" }}
+          >
+            Nenhum cliente disponível
+          </p>
         </div>
-      </div>
+      )}
+
+      {/* Brand list — paddingTop: 50vh inicia a lista do centro da tela */}
+      {brands.length > 0 && (
+        <div
+          className="absolute top-0 bottom-0 z-10 overflow-hidden"
+          style={{ left: "calc(37.5% + 14px)", paddingTop: "30vh" }}
+        >
+          <div
+            ref={listRef}
+            className="flex flex-col"
+            style={{ willChange: isScrollable ? "transform" : "auto" }}
+          >
+            {displayedBrands.map((brand, i) => {
+              const words = brand.name.trim().split(/\s+/)
+              return (
+                <div
+                  key={`${brand.slug}-${i}`}
+                  onClick={() => router.push(`/streaming/${brand.slug}`)}
+                  className="cursor-pointer transition-opacity hover:opacity-70"
+                >
+                  {words.map((word, wi) => (
+                    <div
+                      key={wi}
+                      className="font-sans font-normal text-white"
+                      style={{ fontSize: `${LINE_HEIGHT}px`, lineHeight: "1", height: `${LINE_HEIGHT}px`, overflow: "hidden" }}
+                    >
+                      {word}
+                    </div>
+                  ))}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* ACESSAR button */}
       <button
