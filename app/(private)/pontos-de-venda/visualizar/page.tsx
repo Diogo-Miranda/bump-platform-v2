@@ -1,7 +1,7 @@
 import SalePointsList from "@/app/components/sale-points/SalePointsList"
-import { getSalePointsList } from "@/app/features/sale-points/services"
+import { getSalePoints } from "@/app/features/sale-points/services"
 
 export default function SalePointsListPage() {
-  const data = getSalePointsList()
+  const data = getSalePoints()
   return <SalePointsList data={data} />
 }
