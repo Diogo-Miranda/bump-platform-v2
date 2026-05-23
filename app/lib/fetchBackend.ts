@@ -20,14 +20,14 @@ export async function fetchBackend(
 
   const saToken = await getServiceAccountIdToken()
 
-  const authHeaders: Record<string, string> = saToken
-    ? {
-        Authorization: `Bearer ${saToken}`,
-        ...(userToken ? { "X-User-Token": userToken } : {}),
-      }
-    : userToken
-      ? { Authorization: `Bearer ${userToken}` }
-      : {}
+  const authHeaders: Record<string, string> = {
+    ...(saToken
+      ? { Authorization: `Bearer ${saToken}` }
+      : userToken
+        ? { Authorization: `Bearer ${userToken}` }
+        : {}),
+    ...(userToken ? { "X-User-Token": userToken } : {}),
+  }
 
   return fetch(`${baseUrl}${path}`, {
     ...init,
