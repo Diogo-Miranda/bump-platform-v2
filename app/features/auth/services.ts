@@ -1,12 +1,19 @@
+import { getServiceAccountIdToken } from "@/app/lib/serviceAccount"
+
 type TokenResult =
   | { ok: true; accessToken: string }
   | { ok: false; status: number }
 
 export async function fetchBackendToken(username: string, password: string): Promise<TokenResult> {
   try {
+    const saToken = await getServiceAccountIdToken()
+
     const res = await fetch(`${process.env.BUMP_BACKEND_URL}/auth/token`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(saToken ? { Authorization: `Bearer ${saToken}` } : {}),
+      },
       body: JSON.stringify({
         username,
         password,
